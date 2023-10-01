@@ -16,23 +16,28 @@ It's not officially supported, but you may also be able to use it for
 certain *OGC API - Records* and *OGC API - Features* compliant servers.
 
 **Table of Contents:**
-- [Examples](#examples)
-- [Get Started](#get-started)
-  - [Private query parameters](#private-query-parameters)
-  - [Migrate from old versions](#migrate-from-old-versions)
-- [Customize](#customize)
-  - [Options](#options)
-  - [Languages](#languages)
-  - [Themes](#themes)
-  - [Basemaps](#basemaps)
-  - [Actions](#actions)
-  - [Additional metadata fields](#additional-metadata-fields)
-  - [Customize through root catalog](#customize-through-root-catalog)
-  - [Custom extensions](#custom-extensions)
-- [Docker](#docker)
-- [Contributing](#contributing)
-  - [Adding a new language](#adding-a-new-language)
-- [Sponsors](#sponsors)
+
+- [STAC Browser](#stac-browser)
+  - [Examples](#examples)
+  - [Get Started](#get-started)
+    - [Private query parameters](#private-query-parameters)
+    - [Migrate from old versions](#migrate-from-old-versions)
+  - [Customize](#customize)
+    - [Options](#options)
+    - [Languages](#languages)
+      - [Custom phrases](#custom-phrases)
+    - [Themes](#themes)
+    - [Basemaps](#basemaps)
+    - [Actions](#actions)
+    - [Additional metadata fields](#additional-metadata-fields)
+      - [Example](#example)
+      - [Translation](#translation)
+    - [Customize through root catalog](#customize-through-root-catalog)
+    - [Custom extensions](#custom-extensions)
+  - [Docker](#docker)
+  - [Contributing](#contributing)
+    - [Adding a new language](#adding-a-new-language)
+  - [Sponsors](#sponsors)
 
 ## Examples
 
@@ -45,6 +50,7 @@ The catalog section of [STAC Index](https://stacindex.org) is also built on top 
 First, you need to clone or download this repository.
 
 Then switch into the newly created folder and install all dependencies:
+
 ```bash
 npm install
 ```
@@ -57,6 +63,7 @@ In this example we point to EarthSearch (`https://earth-search.aws.element84.com
 ```bash
 npm start -- --open --catalogUrl="https://earth-search.aws.element84.com/v1/"
 ```
+
 To open a local file on your system, see the chapter [Using Local Files](docs/local_files.md).
 
 If you'd like to publish the STAC Browser instance use the following command:
@@ -109,6 +116,7 @@ STAC Browser can be translated into other languages and can localize number form
 You need to change the [`locale`](docs/options.md#locale) and [`supportedLocales`](docs/options.md#supportedlocales) settings to select the default language and the languages available to users.
 
 The following languages are currently supported:
+
 - de: German (Germany, Switzerland)
 - es: Spanish
 - en: English
@@ -121,12 +129,14 @@ We manage the translations in Crowdin, please see <https://crowdin.com/project/s
 To add your own language, please follow the guide below: [Adding a new langauge](#adding-a-new-language)
 
 #### Custom phrases
+
 You can define custom phrases in the `custom.json`.
 This is especially useful for phrases that are coming from non-standadized metadata fields (see the chapter "[Additional metadata fields](#additional-metadata-fields)").
 If you've found metadata labels (e.g. "Price" and "Generation Time") that are not translated,
 you can add it to the `custom.json`. For metadata fields you need to add it to a the object `fields`
 as it is the group for the metadata-related phrases.
 There you can add as many phrases as you like. For example:
+
 ```json
 {
   "fields": {
@@ -171,6 +181,7 @@ It uses the [Registry](https://github.com/stac-utils/stac-fields/blob/main/READM
 To add your own fields, please consult the documentation for the [Registry](https://github.com/stac-utils/stac-fields/blob/main/README.md#registry).
 
 #### Example
+
 If you have a custom extension with the title "Radiant Earth" that uses the prefix `radiant:` you can add the extension as such:
 
 ```js
@@ -200,7 +211,8 @@ To add the phrases mentioned above you need to go through the folders in `src/lo
 All new phrases must be added to the property `fields`.
 
 Below you can find an example of an updated `custom.json` for the German language (folder `de`). It also includes the `authConfig`, which is contained in the file by default for [other purposes](docs/options.md#authconfig).
-```
+
+```json
 {
   "authConfig": {
     "description": ""
@@ -215,8 +227,9 @@ Below you can find an example of an updated `custom.json` for the German languag
 
 ### Customize through root catalog
 
-You can also provide a couple of the config options through the root catalog. 
+You can also provide a couple of the config options through the root catalog.
 You need to provide a field `stac_browser` and then you can set any of the following options:
+
 - `apiCatalogPriority`
 - `authConfig` (except for the `formatter` as function)
 - `cardViewMode`
@@ -239,7 +252,7 @@ STAC Browser supports some non-standardized extensions to the STAC specification
 When building the Dockerfile, you can add the [`catalogUrl`](docs/options.md#catalogurl) 
 as a [build argument](https://docs.docker.com/engine/reference/commandline/build/#set-build-time-variables---build-arg). For example:
 
-```
+```bash
 docker build -t stac-browser:v1 --build-arg catalogURL=https://planetarycomputer.microsoft.com/api/stac/v1/ .
 ```
 
@@ -247,7 +260,7 @@ If more arguments need to be passed to `npm run build`, you can add them to the 
 
 To run the container:
 
-```
+```bash
 docker run -p 8080:8080 stac-browser:v1
 ```
 
@@ -259,6 +272,7 @@ STAC Browser is following the [STAC code of conduct](https://github.com/radiante
 STAC Browser uses [Vue](https://vuejs.org/) and [vue-cli](https://cli.vuejs.org/), so you need a recent version of [NodeJS and npm](https://nodejs.org/en/) installed.
 
 You can run the following commands (see also "[Get started](#get-started)" above):
+
 - `npm run install`: Install the dependencies, this is required once at the beginning.
 - `npm start`: Start the development server
 - `npm run lint`: Lint the source code files
@@ -275,6 +289,7 @@ You can translate STAC Browser into other languages.
 You can also use one of the existing languages and provide an alternate version for a specifc country, e.g. a Australian English (en-AU) version of the US-English language pack (en).
 
 **Please follow this guide:**
+
 - Copy the `en` folder (or any other language without a country code that you want to base the translation on).
   - Note: If you start with the `en` folder, you have to remove the leading `//` from the line `// { fields: require('./fields.json') }` in the file `default.js`.
 - Name the new folder according to [RFC5646](https://www.rfc-editor.org/rfc/rfc5646).
@@ -289,7 +304,7 @@ You can also use one of the existing languages and provide an alternate version 
 - Once completed, please open a pull request and we'll get back to you as soon as possible.
 - After merging the PR for the first time, we'll add you to our translation management tool Crowdin: <https://crowdin.com/project/stac-browser/>. Please get in touch to get your invite!
 
-# Sponsors
+## Sponsors
 
 The following sponsors have provided a subststantial amount of funding for STAC Browser in the past:
 

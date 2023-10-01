@@ -1,0 +1,8 @@
+services:
+  browser:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      SB_catalogUrl: "https://stac.staging.digitalearthpacific.org"
+      SB_catalogTitle: "Digital Earth Pacific"
